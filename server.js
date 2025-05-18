@@ -1,16 +1,22 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
+// Rotas
+const routes = require('./routes/index');
+
 // Middleware para processar JSON
 app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 // Configura o mecanismo de visualização para usar EJS
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-// Rotas
-const routes = require('./routes/index');
+app.use('/api', routes);
 app.use('/', routes);
 
 // Inicializa o servidor
