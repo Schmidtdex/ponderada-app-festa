@@ -8,3 +8,26 @@ Este projeto consite no desenvolvimento de uma plataforma digital  para o gerenc
 * Perfil de usuários: Cadastro seguro de usuários com distinção entre perfis: Organizador e Cliente
 
 ### Para executar o projeto localmente basta dar um node server.js
+
+
+##  Configuração do Banco de Dados
+Para que a aplicação funcione corretamente, é necessário configurar a conexão com um banco de dados PostgreSQL.
+Crie um arquivo .env, contendo:
+DB_USER=seu_usuario_postgres
+DB_HOST=localhost
+DB_DATABASE=app_festas_db
+DB_PASSWORD=sua_senha_postgres
+DB_PORT=5432
+
+Pronto, seu banco de dados esta configurado!!
+
+# Testando a API
+
+Iniciar o Servidor: Execute o seguinte comando na raiz do projeto:
+
+node server.js
+
+Agora utilizando a ferramenta de teste Postman  para enviar requisições aos endpoints
+exemplos de uso: Crie um Evento: Use POST para /api/eventos com os dados do evento
+Liste Eventos: Use GET para /api/eventos para ver o evento criado.
+Compre um Ingresso: Use POST para /api/ingressos/comprar com o tipo_ingresso_id e o usuario_id do cliente.
