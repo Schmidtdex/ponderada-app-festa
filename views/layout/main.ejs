@@ -4,20 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= pageTitle %></title>  
-  <style>
-    <%- include('../css/style.css'); %>
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen flex flex-col">
   <!-- Inclui o cabeçalho como um partial -->
   <%- include('../components/header') %>
 
-  <main>
+  <main class="flex-grow container mx-auto px-4 py-8">
     <!-- Renderiza o conteúdo da página específica -->
     <%- include(content) %>
   </main>
 
-  <footer>
+  <footer class="bg-gray-100 py-4 text-center text-gray-600">
     <!-- Rodapé comum aqui -->
     <p>Rodapé da Aplicação</p>
   </footer>

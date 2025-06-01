@@ -1,5 +1,5 @@
 const pool = require("../config/db");
-const bcrypt = require('bcrypt'); // Assuming bcrypt will be used for hashing in controller/service
+const bcrypt = require('bcrypt'); 
 
 class Usuario {
   static async criar(nome_completo, email, senha_hash, tipo_usuario) {
