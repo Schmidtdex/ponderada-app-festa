@@ -5,8 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= pageTitle %></title>  
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#FADCD5',
+              100: '#F5C7B8',
+              200: '#E8A691',
+              300: '#DB856A',
+              400: '#CE6443',
+              500: '#765D67',
+              600: '#6D3C52',
+              700: '#4B2138',
+              800: '#2D222F',
+              900: '#1B0C1A'
+            }
+          },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-primary-50 to-primary-100 min-h-screen flex flex-col font-sans overscroll-none">
   <!-- Inclui o cabeçalho como um partial -->
   <%- include('../components/header') %>
 
@@ -15,9 +41,11 @@
     <%- include(content) %>
   </main>
 
-  <footer class="bg-gray-100 py-4 text-center text-gray-600">
-    <!-- Rodapé comum aqui -->
-    <p>Rodapé da Aplicação</p>
+  <footer class="bg-primary-800/90 backdrop-blur-sm py-6 text-center text-primary-50 border-t border-primary-700/30">
+    <div class="container mx-auto px-4">
+      <p class="text-sm font-medium">© 2024 Nightly - Organize. Gerencie. Celebre.</p>
+      <p class="text-xs text-primary-200 mt-1">Desenvolvido com ❤️ para criar momentos inesquecíveis</p>
+    </div>
   </footer>
 
   <!-- Adicione scripts JS se necessário -->
