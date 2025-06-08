@@ -1,0 +1,468 @@
+<div class="max-w-6xl mx-auto">
+  <!-- Header da página -->
+  <div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+      <a href="/organizador/eventos" class="text-primary-600 hover:text-primary-700 p-2 rounded-lg hover:bg-primary-100 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+      <div>
+        <h1 class="text-3xl font-bold text-primary-800">Gerenciar Line-up</h1>
+        <p class="text-primary-600"><%= evento.nome_evento %></p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4 text-sm text-primary-600">
+      <span class="flex items-center">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <%= new Date(evento.data_hora_inicio).toLocaleDateString('pt-BR') %>
+      </span>
+      <span class="flex items-center">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <%= evento.local_evento %>
+      </span>
+    </div>
+  </div>
+
+  <!-- Navegação rápida -->
+  <div class="flex items-center space-x-4 mb-6">
+    <a href="/organizador/eventos/<%= evento.id %>/editar" class="px-4 py-2 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+      Editar Evento
+    </a>
+    <a href="/organizador/eventos/<%= evento.id %>/ingressos" class="px-4 py-2 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+      Gerenciar Ingressos
+    </a>
+    <a href="/eventos/<%= evento.id %>" target="_blank" class="px-4 py-2 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+      Ver Página Pública
+    </a>
+  </div>
+
+  <!-- Mensagem de resultado -->
+  <div id="mensagem-resultado" class="hidden mb-6"></div>
+
+  <!-- Adicionar nova atração -->
+  <div class="bg-white rounded-xl shadow-lg border border-primary-100 mb-6">
+    <div class="p-6 border-b border-primary-100">
+      <h2 class="text-xl font-semibold text-primary-800">Adicionar Atração ao Line-up</h2>
+    </div>
+    
+    <form id="form-nova-atracao" class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label for="nome_atracao" class="block text-sm font-medium text-primary-700 mb-2">Nome da Atração *</label>
+          <input 
+            type="text" 
+            id="nome_atracao" 
+            name="nome_atracao" 
+            required
+            placeholder="Ex: DJ Snake, Banda XYZ"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="genero_musical" class="block text-sm font-medium text-primary-700 mb-2">Gênero Musical</label>
+          <input 
+            type="text" 
+            id="genero_musical" 
+            name="genero_musical"
+            placeholder="Ex: Eletrônica, Rock, Pop"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="horario_apresentacao" class="block text-sm font-medium text-primary-700 mb-2">Horário de Apresentação</label>
+          <input 
+            type="time" 
+            id="horario_apresentacao" 
+            name="horario_apresentacao"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label for="descricao_atracao" class="block text-sm font-medium text-primary-700 mb-2">Descrição</label>
+        <textarea 
+          id="descricao_atracao" 
+          name="descricao_atracao" 
+          rows="3"
+          placeholder="Descreva a atração, estilo musical, experiência..."
+          class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+        ></textarea>
+      </div>
+      
+      <div class="flex items-center justify-end">
+        <button 
+          type="submit" 
+          class="px-6 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center space-x-2"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span>Adicionar ao Line-up</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Line-up do evento -->
+  <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+    <div class="p-6 border-b border-primary-100">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-primary-800">Line-up do Evento</h2>
+        <div class="flex items-center space-x-2 text-sm text-primary-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+          </svg>
+          <span id="total-atracoes">0 atrações</span>
+        </div>
+      </div>
+    </div>
+    
+    <div id="lista-lineup">
+      <!-- Placeholder para quando não há atrações -->
+      <div id="placeholder-lineup" class="p-8 text-center">
+        <svg class="w-16 h-16 text-primary-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+        </svg>
+        <h3 class="text-lg font-medium text-primary-600 mb-2">Nenhuma atração no line-up</h3>
+        <p class="text-primary-500">Adicione atrações para criar um line-up incrível!</p>
+      </div>
+      
+      <!-- Container para as atrações -->
+      <div id="atracoes-container" class="hidden">
+        <div class="p-4 bg-primary-50 border-b border-primary-100">
+          <p class="text-sm text-primary-600">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Arraste e solte para reordenar as atrações no line-up
+          </p>
+        </div>
+        
+        <div id="lista-atracoes" class="divide-y divide-primary-100">
+          <!-- As atrações serão inseridas aqui dinamicamente -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edição de atração -->
+<div id="modal-editar-atracao" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 max-w-lg w-full mx-4">
+    <h3 class="text-lg font-semibold text-primary-800 mb-4">Editar Atração</h3>
+    
+    <form id="form-editar-atracao">
+      <input type="hidden" id="edit-atracao-id">
+      
+      <div class="space-y-4">
+        <div>
+          <label for="edit-nome-atracao" class="block text-sm font-medium text-primary-700 mb-2">Nome da Atração</label>
+          <input 
+            type="text" 
+            id="edit-nome-atracao" 
+            required
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="edit-genero-musical" class="block text-sm font-medium text-primary-700 mb-2">Gênero Musical</label>
+          <input 
+            type="text" 
+            id="edit-genero-musical"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="edit-horario-apresentacao" class="block text-sm font-medium text-primary-700 mb-2">Horário de Apresentação</label>
+          <input 
+            type="time" 
+            id="edit-horario-apresentacao"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="edit-descricao-atracao" class="block text-sm font-medium text-primary-700 mb-2">Descrição</label>
+          <textarea 
+            id="edit-descricao-atracao" 
+            rows="3"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          ></textarea>
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-end space-x-4 mt-6">
+        <button type="button" onclick="fecharModalEdicao()" class="px-4 py-2 text-primary-600 hover:text-primary-700">
+          Cancelar
+        </button>
+        <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+          Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div id="modal-exclusao-atracao" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+    <h3 class="text-lg font-semibold text-primary-800 mb-4">Confirmar Exclusão</h3>
+    <p class="text-primary-600 mb-6">Tem certeza que deseja remover esta atração do line-up?</p>
+    <div class="flex items-center justify-end space-x-4">
+      <button onclick="fecharModalExclusaoAtracao()" class="px-4 py-2 text-primary-600 hover:text-primary-700">
+        Cancelar
+      </button>
+      <button id="confirmar-exclusao-atracao" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        Remover
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Simulação de dados (em uma implementação real, estes dados viriam do backend)
+let atracoes = [];
+let proximoId = 1;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const formNovaAtracao = document.getElementById('form-nova-atracao');
+  const formEditarAtracao = document.getElementById('form-editar-atracao');
+  const mensagemResultado = document.getElementById('mensagem-resultado');
+
+  // Adicionar nova atração
+  formNovaAtracao.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const novaAtracao = {
+      id: proximoId++,
+      nome: formData.get('nome_atracao'),
+      genero: formData.get('genero_musical'),
+      horario: formData.get('horario_apresentacao'),
+      descricao: formData.get('descricao_atracao'),
+      ordem: atracoes.length + 1
+    };
+
+    atracoes.push(novaAtracao);
+    renderizarLineup();
+    this.reset();
+    mostrarMensagem('Atração adicionada ao line-up com sucesso!', 'success');
+  });
+
+  // Editar atração
+  formEditarAtracao.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const atracaoId = parseInt(document.getElementById('edit-atracao-id').value);
+    const atracao = atracoes.find(a => a.id === atracaoId);
+    
+    if (atracao) {
+      atracao.nome = document.getElementById('edit-nome-atracao').value;
+      atracao.genero = document.getElementById('edit-genero-musical').value;
+      atracao.horario = document.getElementById('edit-horario-apresentacao').value;
+      atracao.descricao = document.getElementById('edit-descricao-atracao').value;
+      
+      renderizarLineup();
+      fecharModalEdicao();
+      mostrarMensagem('Atração atualizada com sucesso!', 'success');
+    }
+  });
+
+  function renderizarLineup() {
+    const placeholder = document.getElementById('placeholder-lineup');
+    const container = document.getElementById('atracoes-container');
+    const listaAtracoes = document.getElementById('lista-atracoes');
+    const totalAtracoes = document.getElementById('total-atracoes');
+
+    totalAtracoes.textContent = `${atracoes.length} ${atracoes.length === 1 ? 'atração' : 'atrações'}`;
+
+    if (atracoes.length === 0) {
+      placeholder.classList.remove('hidden');
+      container.classList.add('hidden');
+      return;
+    }
+
+    placeholder.classList.add('hidden');
+    container.classList.remove('hidden');
+
+    // Ordenar por ordem
+    atracoes.sort((a, b) => a.ordem - b.ordem);
+
+    listaAtracoes.innerHTML = atracoes.map(atracao => `
+      <div class="p-6 atracao-item cursor-move" data-atracao-id="${atracao.id}" draggable="true">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4 flex-1">
+            <!-- Handle para arrastar -->
+            <div class="text-primary-400 cursor-move">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+              </svg>
+            </div>
+            
+            <!-- Informações da atração -->
+            <div class="flex-1">
+              <div class="flex items-center space-x-4 mb-2">
+                <h3 class="text-lg font-semibold text-primary-800">${atracao.nome}</h3>
+                ${atracao.horario ? `<span class="text-primary-600 font-medium">${atracao.horario}</span>` : ''}
+                ${atracao.genero ? `<span class="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">${atracao.genero}</span>` : ''}
+              </div>
+              ${atracao.descricao ? `<p class="text-primary-600 text-sm">${atracao.descricao}</p>` : ''}
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div class="flex items-center space-x-2 ml-4">
+            <button 
+              onclick="editarAtracao(${atracao.id})"
+              class="text-primary-600 hover:text-primary-700 p-2 rounded-lg hover:bg-primary-100 transition-colors duration-200"
+              title="Editar"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </button>
+            
+            <button 
+              onclick="confirmarExclusaoAtracao(${atracao.id})"
+              class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-100 transition-colors duration-200"
+              title="Remover"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Configurar drag and drop
+    configurarDragAndDrop();
+  }
+
+  function configurarDragAndDrop() {
+    const items = document.querySelectorAll('.atracao-item');
+    
+    items.forEach(item => {
+      item.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', this.dataset.atracaoId);
+        this.classList.add('opacity-50');
+      });
+
+      item.addEventListener('dragend', function() {
+        this.classList.remove('opacity-50');
+      });
+
+      item.addEventListener('dragover', function(e) {
+        e.preventDefault();
+      });
+
+      item.addEventListener('drop', function(e) {
+        e.preventDefault();
+        const draggedId = parseInt(e.dataTransfer.getData('text/plain'));
+        const targetId = parseInt(this.dataset.atracaoId);
+        
+        if (draggedId !== targetId) {
+          reordenarAtracoes(draggedId, targetId);
+        }
+      });
+    });
+  }
+
+  function reordenarAtracoes(draggedId, targetId) {
+    const draggedIndex = atracoes.findIndex(a => a.id === draggedId);
+    const targetIndex = atracoes.findIndex(a => a.id === targetId);
+    
+    // Remover o item arrastado
+    const [draggedItem] = atracoes.splice(draggedIndex, 1);
+    
+    // Inserir na nova posição
+    atracoes.splice(targetIndex, 0, draggedItem);
+    
+    // Atualizar as ordens
+    atracoes.forEach((atracao, index) => {
+      atracao.ordem = index + 1;
+    });
+    
+    renderizarLineup();
+    mostrarMensagem('Ordem do line-up atualizada!', 'success');
+  }
+
+  function mostrarMensagem(texto, tipo) {
+    mensagemResultado.textContent = texto;
+    mensagemResultado.className = `mb-6 p-4 rounded-lg ${
+      tipo === 'success' 
+        ? 'bg-green-100 border border-green-400 text-green-700' 
+        : 'bg-red-100 border border-red-400 text-red-700'
+    }`;
+    mensagemResultado.classList.remove('hidden');
+    
+    setTimeout(() => {
+      mensagemResultado.classList.add('hidden');
+    }, 3000);
+  }
+
+  // Tornar funções disponíveis globalmente
+  window.renderizarLineup = renderizarLineup;
+  window.mostrarMensagem = mostrarMensagem;
+  window.atracoes = atracoes;
+});
+
+// Funções globais
+let atracaoParaExcluir = null;
+
+function editarAtracao(atracaoId) {
+  const atracao = atracoes.find(a => a.id === atracaoId);
+  if (!atracao) return;
+
+  document.getElementById('edit-atracao-id').value = atracao.id;
+  document.getElementById('edit-nome-atracao').value = atracao.nome;
+  document.getElementById('edit-genero-musical').value = atracao.genero || '';
+  document.getElementById('edit-horario-apresentacao').value = atracao.horario || '';
+  document.getElementById('edit-descricao-atracao').value = atracao.descricao || '';
+  
+  document.getElementById('modal-editar-atracao').classList.remove('hidden');
+}
+
+function fecharModalEdicao() {
+  document.getElementById('modal-editar-atracao').classList.add('hidden');
+}
+
+function confirmarExclusaoAtracao(atracaoId) {
+  atracaoParaExcluir = atracaoId;
+  document.getElementById('modal-exclusao-atracao').classList.remove('hidden');
+}
+
+function fecharModalExclusaoAtracao() {
+  document.getElementById('modal-exclusao-atracao').classList.add('hidden');
+  atracaoParaExcluir = null;
+}
+
+document.getElementById('confirmar-exclusao-atracao').addEventListener('click', function() {
+  if (atracaoParaExcluir) {
+    const index = atracoes.findIndex(a => a.id === atracaoParaExcluir);
+    if (index !== -1) {
+      atracoes.splice(index, 1);
+      // Reordenar
+      atracoes.forEach((atracao, i) => {
+        atracao.ordem = i + 1;
+      });
+      renderizarLineup();
+      mostrarMensagem('Atração removida do line-up!', 'success');
+    }
+  }
+  fecharModalExclusaoAtracao();
+});
+</script>
+

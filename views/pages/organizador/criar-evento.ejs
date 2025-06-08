@@ -1,0 +1,273 @@
+<div class="max-w-4xl mx-auto">
+  <!-- Header da página -->
+  <div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+      <a href="/organizador/eventos" class="text-primary-600 hover:text-primary-700 p-2 rounded-lg hover:bg-primary-100 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+      <h1 class="text-3xl font-bold text-primary-800">Criar Novo Evento</h1>
+    </div>
+    <p class="text-primary-600">Preencha as informações do seu evento para começar a vender ingressos.</p>
+  </div>
+
+  <!-- Mensagem de resultado -->
+  <div id="mensagem-resultado" class="hidden mb-6"></div>
+
+  <!-- Formulário de criação -->
+  <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+    <div class="p-6 border-b border-primary-100">
+      <h2 class="text-xl font-semibold text-primary-800">Informações do Evento</h2>
+    </div>
+    
+    <form id="form-criar-evento" class="p-6 space-y-6">
+      <!-- Nome do Evento -->
+      <div>
+        <label for="nome_evento" class="block text-sm font-medium text-primary-700 mb-2">
+          Nome do Evento *
+        </label>
+        <input 
+          type="text" 
+          id="nome_evento" 
+          name="nome_evento" 
+          required
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: Festival de Música Eletrônica"
+        >
+        <p class="text-sm text-primary-500 mt-1">Escolha um nome atrativo e descritivo para seu evento</p>
+      </div>
+
+      <!-- Descrição -->
+      <div>
+        <label for="descricao" class="block text-sm font-medium text-primary-700 mb-2">
+          Descrição
+        </label>
+        <textarea 
+          id="descricao" 
+          name="descricao" 
+          rows="4"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Descreva seu evento, atrações, diferenciais..."
+        ></textarea>
+      </div>
+
+      <!-- Data e Hora -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="data_hora_inicio" class="block text-sm font-medium text-primary-700 mb-2">
+            Data e Hora de Início *
+          </label>
+          <input 
+            type="datetime-local" 
+            id="data_hora_inicio" 
+            name="data_hora_inicio" 
+            required
+            class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          >
+        </div>
+        
+        <div>
+          <label for="data_hora_fim" class="block text-sm font-medium text-primary-700 mb-2">
+            Data e Hora de Fim
+          </label>
+          <input 
+            type="datetime-local" 
+            id="data_hora_fim" 
+            name="data_hora_fim"
+            class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          >
+        </div>
+      </div>
+
+      <!-- Local -->
+      <div>
+        <label for="local_evento" class="block text-sm font-medium text-primary-700 mb-2">
+          Local do Evento *
+        </label>
+        <input 
+          type="text" 
+          id="local_evento" 
+          name="local_evento" 
+          required
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: Centro de Convenções, Rua das Flores, 123"
+        >
+      </div>
+
+      <!-- Capacidade Máxima -->
+      <div>
+        <label for="capacidade_maxima" class="block text-sm font-medium text-primary-700 mb-2">
+          Capacidade Máxima
+        </label>
+        <input 
+          type="number" 
+          id="capacidade_maxima" 
+          name="capacidade_maxima" 
+          min="1"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: 500"
+        >
+        <p class="text-sm text-primary-500 mt-1">Deixe em branco para capacidade ilimitada</p>
+      </div>
+
+      <!-- URL da Imagem de Capa -->
+      <div>
+        <label for="url_imagem_capa" class="block text-sm font-medium text-primary-700 mb-2">
+          URL da Imagem de Capa
+        </label>
+        <input 
+          type="url" 
+          id="url_imagem_capa" 
+          name="url_imagem_capa"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="https://exemplo.com/imagem.jpg"
+        >
+        <p class="text-sm text-primary-500 mt-1">URL de uma imagem que represente seu evento</p>
+      </div>
+
+      <!-- Preview da Imagem -->
+      <div id="preview-imagem" class="hidden">
+        <label class="block text-sm font-medium text-primary-700 mb-2">Preview da Imagem</label>
+        <div class="w-full h-48 bg-primary-50 rounded-lg border border-primary-200 overflow-hidden">
+          <img id="imagem-preview" src="" alt="Preview" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="flex items-center justify-between pt-6 border-t border-primary-100">
+        <button 
+          type="button" 
+          onclick="salvarRascunho()"
+          class="px-6 py-3 border border-primary-300 text-primary-700 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200"
+        >
+          Salvar como Rascunho
+        </button>
+        
+        <div class="flex items-center space-x-4">
+          <a 
+            href="/organizador/eventos" 
+            class="px-6 py-3 text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200"
+          >
+            Cancelar
+          </a>
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center space-x-2"
+          >
+            <span>Criar Evento</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('form-criar-evento');
+  const mensagemResultado = document.getElementById('mensagem-resultado');
+  const urlImagemInput = document.getElementById('url_imagem_capa');
+  const previewDiv = document.getElementById('preview-imagem');
+  const imagemPreview = document.getElementById('imagem-preview');
+
+  // Preview da imagem
+  urlImagemInput.addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url) {
+      imagemPreview.src = url;
+      imagemPreview.onload = function() {
+        previewDiv.classList.remove('hidden');
+      };
+      imagemPreview.onerror = function() {
+        previewDiv.classList.add('hidden');
+      };
+    } else {
+      previewDiv.classList.add('hidden');
+    }
+  });
+
+  // Validação de data
+  const dataInicioInput = document.getElementById('data_hora_inicio');
+  const dataFimInput = document.getElementById('data_hora_fim');
+
+  dataInicioInput.addEventListener('change', function() {
+    const dataInicio = new Date(this.value);
+    const agora = new Date();
+    
+    if (dataInicio < agora) {
+      mostrarMensagem('A data de início deve ser no futuro.', 'error');
+      this.value = '';
+      return;
+    }
+
+    // Definir data mínima para o fim
+    dataFimInput.min = this.value;
+  });
+
+  dataFimInput.addEventListener('change', function() {
+    const dataInicio = new Date(dataInicioInput.value);
+    const dataFim = new Date(this.value);
+    
+    if (dataFim <= dataInicio) {
+      mostrarMensagem('A data de fim deve ser posterior à data de início.', 'error');
+      this.value = '';
+    }
+  });
+
+  // Submissão do formulário
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const dados = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/organizador/eventos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dados)
+      });
+
+      const resultado = await response.json();
+
+      if (response.ok) {
+        mostrarMensagem(resultado.message || 'Evento criado com sucesso!', 'success');
+        setTimeout(() => {
+          window.location.href = '/organizador/eventos';
+        }, 2000);
+      } else {
+        mostrarMensagem(resultado.error || 'Erro ao criar evento', 'error');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      mostrarMensagem('Erro de conexão. Tente novamente.', 'error');
+    }
+  });
+
+  function mostrarMensagem(texto, tipo) {
+    mensagemResultado.textContent = texto;
+    mensagemResultado.className = `mb-6 p-4 rounded-lg ${
+      tipo === 'success' 
+        ? 'bg-green-100 border border-green-400 text-green-700' 
+        : 'bg-red-100 border border-red-400 text-red-700'
+    }`;
+    mensagemResultado.classList.remove('hidden');
+    
+    // Scroll para a mensagem
+    mensagemResultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Função para salvar rascunho (implementação futura)
+  window.salvarRascunho = function() {
+    alert('Funcionalidade de rascunho será implementada em breve!');
+  };
+});
+</script>
+

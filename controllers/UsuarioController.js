@@ -70,6 +70,8 @@ exports.loginUsuario = async (req, res) => {
     // Remover hash da senha da resposta
     delete usuario.senha_hash;
 
+    // Definir o cookie ANTES de enviar a resposta
+    res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
     res.status(200).json({ 
         message: 'Login bem-sucedido!', 
         token: token, 

@@ -1,0 +1,363 @@
+<div class="max-w-4xl mx-auto">
+  <!-- Header da página -->
+  <div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+      <a href="/organizador/eventos" class="text-primary-600 hover:text-primary-700 p-2 rounded-lg hover:bg-primary-100 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+      <h1 class="text-3xl font-bold text-primary-800">Editar Evento</h1>
+    </div>
+    <p class="text-primary-600">Atualize as informações do seu evento.</p>
+  </div>
+
+  <!-- Mensagem de resultado -->
+  <div id="mensagem-resultado" class="hidden mb-6"></div>
+
+  <!-- Formulário de edição -->
+  <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+    <div class="p-6 border-b border-primary-100">
+      <h2 class="text-xl font-semibold text-primary-800">Informações do Evento</h2>
+    </div>
+    
+    <form id="form-editar-evento" class="p-6 space-y-6">
+      <!-- Nome do Evento -->
+      <div>
+        <label for="nome_evento" class="block text-sm font-medium text-primary-700 mb-2">
+          Nome do Evento *
+        </label>
+        <input 
+          type="text" 
+          id="nome_evento" 
+          name="nome_evento" 
+          required
+          value="<%= evento.nome_evento %>"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: Festival de Música Eletrônica"
+        >
+        <p class="text-sm text-primary-500 mt-1">Escolha um nome atrativo e descritivo para seu evento</p>
+      </div>
+
+      <!-- Descrição -->
+      <div>
+        <label for="descricao" class="block text-sm font-medium text-primary-700 mb-2">
+          Descrição
+        </label>
+        <textarea 
+          id="descricao" 
+          name="descricao" 
+          rows="4"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Descreva seu evento, atrações, diferenciais..."
+        ><%= evento.descricao || '' %></textarea>
+      </div>
+
+      <!-- Data e Hora -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="data_hora_inicio" class="block text-sm font-medium text-primary-700 mb-2">
+            Data e Hora de Início *
+          </label>
+          <input 
+            type="datetime-local" 
+            id="data_hora_inicio" 
+            name="data_hora_inicio" 
+            required
+            value="<%= new Date(evento.data_hora_inicio).toISOString().slice(0, 16) %>"
+            class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          >
+        </div>
+        
+        <div>
+          <label for="data_hora_fim" class="block text-sm font-medium text-primary-700 mb-2">
+            Data e Hora de Fim
+          </label>
+          <input 
+            type="datetime-local" 
+            id="data_hora_fim" 
+            name="data_hora_fim"
+            value="<%= evento.data_hora_fim ? new Date(evento.data_hora_fim).toISOString().slice(0, 16) : '' %>"
+            class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          >
+        </div>
+      </div>
+
+      <!-- Local -->
+      <div>
+        <label for="local_evento" class="block text-sm font-medium text-primary-700 mb-2">
+          Local do Evento *
+        </label>
+        <input 
+          type="text" 
+          id="local_evento" 
+          name="local_evento" 
+          required
+          value="<%= evento.local_evento %>"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: Centro de Convenções, Rua das Flores, 123"
+        >
+      </div>
+
+      <!-- Capacidade Máxima -->
+      <div>
+        <label for="capacidade_maxima" class="block text-sm font-medium text-primary-700 mb-2">
+          Capacidade Máxima
+        </label>
+        <input 
+          type="number" 
+          id="capacidade_maxima" 
+          name="capacidade_maxima" 
+          min="1"
+          value="<%= evento.capacidade_maxima || '' %>"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="Ex: 500"
+        >
+        <p class="text-sm text-primary-500 mt-1">Deixe em branco para capacidade ilimitada</p>
+      </div>
+
+      <!-- URL da Imagem de Capa -->
+      <div>
+        <label for="url_imagem_capa" class="block text-sm font-medium text-primary-700 mb-2">
+          URL da Imagem de Capa
+        </label>
+        <input 
+          type="url" 
+          id="url_imagem_capa" 
+          name="url_imagem_capa"
+          value="<%= evento.url_imagem_capa || '' %>"
+          class="w-full px-4 py-3 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+          placeholder="https://exemplo.com/imagem.jpg"
+        >
+        <p class="text-sm text-primary-500 mt-1">URL de uma imagem que represente seu evento</p>
+      </div>
+
+      <!-- Preview da Imagem -->
+      <div id="preview-imagem" class="<%= evento.url_imagem_capa ? '' : 'hidden' %>">
+        <label class="block text-sm font-medium text-primary-700 mb-2">Preview da Imagem</label>
+        <div class="w-full h-48 bg-primary-50 rounded-lg border border-primary-200 overflow-hidden">
+          <img id="imagem-preview" src="<%= evento.url_imagem_capa || '' %>" alt="Preview" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <!-- Informações adicionais -->
+      <div class="bg-primary-50 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-primary-800 mb-2">Informações do Evento</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-primary-600">
+          <div>
+            <span class="font-medium">Criado em:</span>
+            <%= new Date(evento.data_criacao || Date.now()).toLocaleDateString('pt-BR') %>
+          </div>
+          <div>
+            <span class="font-medium">ID do Evento:</span>
+            #<%= evento.id %>
+          </div>
+          <div>
+            <span class="font-medium">Status:</span>
+            <% 
+              const agora = new Date();
+              const dataEvento = new Date(evento.data_hora_inicio);
+              const isPassado = dataEvento < agora;
+            %>
+            <span class="<%= isPassado ? 'text-gray-600' : 'text-green-600' %>">
+              <%= isPassado ? 'Finalizado' : 'Ativo' %>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="flex items-center justify-between pt-6 border-t border-primary-100">
+        <div class="flex items-center space-x-4">
+          <a href="/organizador/eventos/<%= evento.id %>/ingressos" class="px-6 py-3 border border-primary-300 text-primary-700 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+            </svg>
+            <span>Gerenciar Ingressos</span>
+          </a>
+          
+          <a href="/organizador/eventos/<%= evento.id %>/lineup" class="px-6 py-3 border border-primary-300 text-primary-700 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+            </svg>
+            <span>Gerenciar Line-up</span>
+          </a>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+          <a 
+            href="/organizador/eventos" 
+            class="px-6 py-3 text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200"
+          >
+            Cancelar
+          </a>
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center space-x-2"
+          >
+            <span>Salvar Alterações</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Ações Perigosas -->
+  <div class="bg-red-50 rounded-xl border border-red-200 mt-6">
+    <div class="p-6">
+      <h3 class="text-lg font-semibold text-red-800 mb-2">Zona de Perigo</h3>
+      <p class="text-red-600 mb-4">Estas ações são irreversíveis. Tenha cuidado!</p>
+      <button 
+        onclick="confirmarExclusao()"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors duration-200"
+      >
+        Excluir Evento
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div id="modal-exclusao" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+    <h3 class="text-lg font-semibold text-primary-800 mb-4">Confirmar Exclusão</h3>
+    <p class="text-primary-600 mb-6">Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita e todos os dados relacionados serão perdidos.</p>
+    <div class="flex items-center justify-end space-x-4">
+      <button onclick="fecharModalExclusao()" class="px-4 py-2 text-primary-600 hover:text-primary-700">
+        Cancelar
+      </button>
+      <button id="confirmar-exclusao" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        Excluir Definitivamente
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('form-editar-evento');
+  const mensagemResultado = document.getElementById('mensagem-resultado');
+  const urlImagemInput = document.getElementById('url_imagem_capa');
+  const previewDiv = document.getElementById('preview-imagem');
+  const imagemPreview = document.getElementById('imagem-preview');
+
+  // Preview da imagem
+  urlImagemInput.addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url) {
+      imagemPreview.src = url;
+      imagemPreview.onload = function() {
+        previewDiv.classList.remove('hidden');
+      };
+      imagemPreview.onerror = function() {
+        previewDiv.classList.add('hidden');
+      };
+    } else {
+      previewDiv.classList.add('hidden');
+    }
+  });
+
+  // Validação de data
+  const dataInicioInput = document.getElementById('data_hora_inicio');
+  const dataFimInput = document.getElementById('data_hora_fim');
+
+  dataInicioInput.addEventListener('change', function() {
+    // Definir data mínima para o fim
+    dataFimInput.min = this.value;
+  });
+
+  dataFimInput.addEventListener('change', function() {
+    const dataInicio = new Date(dataInicioInput.value);
+    const dataFim = new Date(this.value);
+    
+    if (dataFim <= dataInicio) {
+      mostrarMensagem('A data de fim deve ser posterior à data de início.', 'error');
+      this.value = '';
+    }
+  });
+
+  // Submissão do formulário
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const dados = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch(`/organizador/eventos/<%= evento.id %>`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dados)
+      });
+
+      const resultado = await response.json();
+
+      if (response.ok) {
+        mostrarMensagem(resultado.message || 'Evento atualizado com sucesso!', 'success');
+      } else {
+        mostrarMensagem(resultado.error || 'Erro ao atualizar evento', 'error');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      mostrarMensagem('Erro de conexão. Tente novamente.', 'error');
+    }
+  });
+
+  function mostrarMensagem(texto, tipo) {
+    mensagemResultado.textContent = texto;
+    mensagemResultado.className = `mb-6 p-4 rounded-lg ${
+      tipo === 'success' 
+        ? 'bg-green-100 border border-green-400 text-green-700' 
+        : 'bg-red-100 border border-red-400 text-red-700'
+    }`;
+    mensagemResultado.classList.remove('hidden');
+    
+    // Scroll para a mensagem
+    mensagemResultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Tornar a função disponível globalmente
+  window.mostrarMensagem = mostrarMensagem;
+});
+
+// Funções para exclusão
+function confirmarExclusao() {
+  document.getElementById('modal-exclusao').classList.remove('hidden');
+}
+
+function fecharModalExclusao() {
+  document.getElementById('modal-exclusao').classList.add('hidden');
+}
+
+document.getElementById('confirmar-exclusao').addEventListener('click', async function() {
+  try {
+    const response = await fetch(`/organizador/eventos/<%= evento.id %>`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    const resultado = await response.json();
+
+    if (response.ok) {
+      alert('Evento excluído com sucesso!');
+      window.location.href = '/organizador/eventos';
+    } else {
+      mostrarMensagem(resultado.error || 'Erro ao excluir evento', 'error');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    mostrarMensagem('Erro de conexão. Tente novamente.', 'error');
+  }
+
+  fecharModalExclusao();
+});
+</script>
+

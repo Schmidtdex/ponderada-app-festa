@@ -73,3 +73,5 @@ CREATE POLICY clientes_view_eventos ON Eventos
 FOR SELECT
 USING (true); 
 
+ALTER TABLE usuarios ALTER COLUMN tipo_usuario TYPE VARCHAR(20);
+

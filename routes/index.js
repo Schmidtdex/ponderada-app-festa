@@ -15,6 +15,8 @@ const eventoRoutes = require("./eventoRoutes");
 const atracaoRoutes = require("./atracaoRoutes");
 const tipoIngressoRoutes = require("./tipoIngressoRoutes");
 const ingressoVendidoRoutes = require("./ingressoVendidoRoutes");
+const organizadorRoutes = require("./organizadorRoutes");
+const clienteRoutes = require("./clienteRoutes");
 
 // Rotas para o front-end (se houver)
 router.use("/", frontRoutes);
@@ -25,6 +27,12 @@ router.use("/api/eventos", eventoRoutes); // Prefixo /api/eventos
 router.use("/api/atracoes", atracaoRoutes); // Prefixo /api/atracoes
 router.use("/api/tipos-ingresso", tipoIngressoRoutes); // Prefixo /api/tipos-ingresso
 router.use("/api/ingressos", ingressoVendidoRoutes); // Prefixo /api/ingressos
+
+// Rotas do organizador
+router.use("/organizador", organizadorRoutes); // Prefixo /organizador
+
+// Rotas do cliente
+router.use("/", clienteRoutes); // Rotas do cliente (sem prefixo para eventos públicos)
 
 module.exports = router;
 

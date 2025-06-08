@@ -1,0 +1,525 @@
+<div class="max-w-4xl mx-auto">
+  <!-- Header da página -->
+  <div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+      <a href="/eventos/<%= evento.id %>" class="text-primary-600 hover:text-primary-700 p-2 rounded-lg hover:bg-primary-100 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+      <div>
+        <h1 class="text-3xl font-bold text-primary-800">Comprar Ingressos</h1>
+        <p class="text-primary-600"><%= evento.nome_evento %></p>
+      </div>
+    </div>
+    
+    <!-- Informações do evento -->
+    <div class="bg-primary-50 rounded-lg p-4">
+      <div class="flex flex-wrap items-center gap-6 text-sm text-primary-700">
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <%= new Date(evento.data_hora_inicio).toLocaleDateString('pt-BR', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          }) %>
+        </div>
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <%= new Date(evento.data_hora_inicio).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}) %>
+        </div>
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <%= evento.local_evento %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensagem de resultado -->
+  <div id="mensagem-resultado" class="hidden mb-6"></div>
+
+  <!-- Formulário de compra -->
+  <form id="form-compra" class="space-y-8">
+    <!-- Seleção de ingressos -->
+    <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+      <div class="p-6 border-b border-primary-100">
+        <h2 class="text-xl font-semibold text-primary-800">Selecione seus Ingressos</h2>
+      </div>
+      
+      <div class="p-6 space-y-4">
+        <% tiposIngresso.forEach((tipo, index) => { %>
+          <div class="border border-primary-200 rounded-lg p-4 ingresso-tipo" data-tipo-id="<%= tipo.id %>" data-preco="<%= tipo.preco %>">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-primary-800"><%= tipo.nome_tipo %></h3>
+                <p class="text-primary-600 text-sm">Disponível: <%= tipo.quantidade_disponivel %> ingressos</p>
+                <% if (tipo.quantidade_disponivel <= 10) { %>
+                  <p class="text-orange-600 text-sm font-medium">⚠️ Últimas unidades!</p>
+                <% } %>
+              </div>
+              <div class="text-right">
+                <div class="text-2xl font-bold text-primary-600">
+                  R$ <%= parseFloat(tipo.preco).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %>
+                </div>
+                <div class="text-sm text-primary-500">por ingresso</div>
+              </div>
+            </div>
+            
+            <!-- Seletor de quantidade -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-primary-700">Quantidade:</label>
+                <div class="flex items-center border border-primary-200 rounded-lg">
+                  <button 
+                    type="button" 
+                    class="p-2 hover:bg-primary-50 transition-colors duration-200 decrementar"
+                    data-tipo-id="<%= tipo.id %>"
+                  >
+                    <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                  </button>
+                  <input 
+                    type="number" 
+                    id="quantidade-<%= tipo.id %>" 
+                    name="quantidade-<%= tipo.id %>"
+                    value="0" 
+                    min="0" 
+                    max="<%= Math.min(tipo.quantidade_disponivel, 10) %>"
+                    class="w-16 text-center border-0 focus:ring-0 quantidade-input"
+                    data-tipo-id="<%= tipo.id %>"
+                    readonly
+                  >
+                  <button 
+                    type="button" 
+                    class="p-2 hover:bg-primary-50 transition-colors duration-200 incrementar"
+                    data-tipo-id="<%= tipo.id %>"
+                    data-max="<%= Math.min(tipo.quantidade_disponivel, 10) %>"
+                  >
+                    <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Subtotal -->
+              <div class="text-right">
+                <div class="text-lg font-semibold text-primary-800 subtotal" id="subtotal-<%= tipo.id %>">
+                  R$ 0,00
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Resumo do pedido -->
+    <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+      <div class="p-6 border-b border-primary-100">
+        <h2 class="text-xl font-semibold text-primary-800">Resumo do Pedido</h2>
+      </div>
+      
+      <div class="p-6">
+        <div id="resumo-vazio" class="text-center py-8 text-primary-500">
+          Selecione ingressos para ver o resumo
+        </div>
+        
+        <div id="resumo-pedido" class="hidden space-y-4">
+          <div id="itens-resumo" class="space-y-2">
+            <!-- Itens serão inseridos dinamicamente -->
+          </div>
+          
+          <div class="border-t border-primary-200 pt-4">
+            <div class="flex items-center justify-between text-lg font-semibold text-primary-800">
+              <span>Total:</span>
+              <span id="total-pedido">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados pessoais -->
+    <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+      <div class="p-6 border-b border-primary-100">
+        <h2 class="text-xl font-semibold text-primary-800">Dados Pessoais</h2>
+      </div>
+      
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="nome_completo" class="block text-sm font-medium text-primary-700 mb-2">Nome Completo *</label>
+          <input 
+            type="text" 
+            id="nome_completo" 
+            name="nome_completo" 
+            required
+            value="<%= user.nome_completo %>"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="email" class="block text-sm font-medium text-primary-700 mb-2">Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            value="<%= user.email %>"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="telefone" class="block text-sm font-medium text-primary-700 mb-2">Telefone</label>
+          <input 
+            type="tel" 
+            id="telefone" 
+            name="telefone"
+            placeholder="(11) 99999-9999"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+        
+        <div>
+          <label for="cpf" class="block text-sm font-medium text-primary-700 mb-2">CPF *</label>
+          <input 
+            type="text" 
+            id="cpf" 
+            name="cpf" 
+            required
+            placeholder="000.000.000-00"
+            class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulação de pagamento -->
+    <div class="bg-white rounded-xl shadow-lg border border-primary-100">
+      <div class="p-6 border-b border-primary-100">
+        <h2 class="text-xl font-semibold text-primary-800">Pagamento</h2>
+      </div>
+      
+      <div class="p-6">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+          <div class="flex items-center">
+            <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-yellow-800 text-sm">
+              <strong>Simulação:</strong> Este é um ambiente de demonstração. Nenhum pagamento real será processado.
+            </p>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-primary-700 mb-2">Método de Pagamento</label>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="radio" name="metodo_pagamento" value="cartao" checked class="text-primary-600 focus:ring-primary-500">
+                <span class="ml-2 text-primary-700">Cartão de Crédito</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="metodo_pagamento" value="pix" class="text-primary-600 focus:ring-primary-500">
+                <span class="ml-2 text-primary-700">PIX</span>
+              </label>
+            </div>
+          </div>
+          
+          <div id="dados-cartao">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label for="numero_cartao" class="block text-sm font-medium text-primary-700 mb-2">Número do Cartão</label>
+                <input 
+                  type="text" 
+                  id="numero_cartao" 
+                  name="numero_cartao"
+                  placeholder="0000 0000 0000 0000"
+                  class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+              </div>
+              
+              <div>
+                <label for="validade" class="block text-sm font-medium text-primary-700 mb-2">Validade</label>
+                <input 
+                  type="text" 
+                  id="validade" 
+                  name="validade"
+                  placeholder="MM/AA"
+                  class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+              </div>
+              
+              <div>
+                <label for="cvv" class="block text-sm font-medium text-primary-700 mb-2">CVV</label>
+                <input 
+                  type="text" 
+                  id="cvv" 
+                  name="cvv"
+                  placeholder="000"
+                  class="w-full px-4 py-2 border border-primary-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões de ação -->
+    <div class="flex items-center justify-between pt-6">
+      <a 
+        href="/eventos/<%= evento.id %>" 
+        class="px-6 py-3 text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200"
+      >
+        Voltar ao Evento
+      </a>
+      
+      <button 
+        type="submit" 
+        id="btn-finalizar"
+        disabled
+        class="px-8 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center space-x-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+        </svg>
+        <span>Finalizar Compra</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('form-compra');
+  const btnFinalizar = document.getElementById('btn-finalizar');
+  const mensagemResultado = document.getElementById('mensagem-resultado');
+  
+  let carrinho = {};
+  
+  // Event listeners para incrementar/decrementar
+  document.querySelectorAll('.incrementar').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tipoId = this.dataset.tipoId;
+      const max = parseInt(this.dataset.max);
+      const input = document.getElementById(`quantidade-${tipoId}`);
+      const atual = parseInt(input.value);
+      
+      if (atual < max) {
+        input.value = atual + 1;
+        atualizarCarrinho();
+      }
+    });
+  });
+  
+  document.querySelectorAll('.decrementar').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tipoId = this.dataset.tipoId;
+      const input = document.getElementById(`quantidade-${tipoId}`);
+      const atual = parseInt(input.value);
+      
+      if (atual > 0) {
+        input.value = atual - 1;
+        atualizarCarrinho();
+      }
+    });
+  });
+  
+  // Event listeners para inputs de quantidade
+  document.querySelectorAll('.quantidade-input').forEach(input => {
+    input.addEventListener('change', atualizarCarrinho);
+  });
+  
+  function atualizarCarrinho() {
+    carrinho = {};
+    let total = 0;
+    let temItens = false;
+    
+    document.querySelectorAll('.ingresso-tipo').forEach(elemento => {
+      const tipoId = elemento.dataset.tipoId;
+      const preco = parseFloat(elemento.dataset.preco);
+      const quantidade = parseInt(document.getElementById(`quantidade-${tipoId}`).value);
+      
+      if (quantidade > 0) {
+        carrinho[tipoId] = {
+          quantidade: quantidade,
+          preco: preco,
+          subtotal: quantidade * preco
+        };
+        total += quantidade * preco;
+        temItens = true;
+      }
+      
+      // Atualizar subtotal
+      const subtotalElement = document.getElementById(`subtotal-${tipoId}`);
+      subtotalElement.textContent = `R$ ${(quantidade * preco).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    });
+    
+    // Atualizar resumo
+    atualizarResumo(total, temItens);
+    
+    // Habilitar/desabilitar botão
+    btnFinalizar.disabled = !temItens;
+  }
+  
+  function atualizarResumo(total, temItens) {
+    const resumoVazio = document.getElementById('resumo-vazio');
+    const resumoPedido = document.getElementById('resumo-pedido');
+    const itensResumo = document.getElementById('itens-resumo');
+    const totalPedido = document.getElementById('total-pedido');
+    
+    if (!temItens) {
+      resumoVazio.classList.remove('hidden');
+      resumoPedido.classList.add('hidden');
+      return;
+    }
+    
+    resumoVazio.classList.add('hidden');
+    resumoPedido.classList.remove('hidden');
+    
+    // Limpar itens
+    itensResumo.innerHTML = '';
+    
+    // Adicionar itens
+    Object.keys(carrinho).forEach(tipoId => {
+      const item = carrinho[tipoId];
+      const tipoElement = document.querySelector(`[data-tipo-id="${tipoId}"]`);
+      const nomeIngresso = tipoElement.querySelector('h3').textContent;
+      
+      const itemElement = document.createElement('div');
+      itemElement.className = 'flex items-center justify-between text-sm';
+      itemElement.innerHTML = `
+        <span class="text-primary-700">${item.quantidade}x ${nomeIngresso}</span>
+        <span class="text-primary-800 font-medium">R$ ${item.subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+      `;
+      itensResumo.appendChild(itemElement);
+    });
+    
+    // Atualizar total
+    totalPedido.textContent = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+  }
+  
+  // Submissão do formulário
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (Object.keys(carrinho).length === 0) {
+      mostrarMensagem('Selecione pelo menos um ingresso', 'error');
+      return;
+    }
+    
+    // Preparar dados
+    const formData = new FormData(form);
+    const ingressos = Object.keys(carrinho).map(tipoId => ({
+      tipo_ingresso_id: parseInt(tipoId),
+      quantidade: carrinho[tipoId].quantidade
+    }));
+    
+    const dados = {
+      ingressos: ingressos,
+      dados_pessoais: {
+        nome_completo: formData.get('nome_completo'),
+        email: formData.get('email'),
+        telefone: formData.get('telefone'),
+        cpf: formData.get('cpf')
+      },
+      pagamento: {
+        metodo: formData.get('metodo_pagamento'),
+        numero_cartao: formData.get('numero_cartao'),
+        validade: formData.get('validade'),
+        cvv: formData.get('cvv')
+      }
+    };
+    
+    try {
+      btnFinalizar.disabled = true;
+      btnFinalizar.innerHTML = '<span>Processando...</span>';
+      
+      const response = await fetch(`/eventos/<%= evento.id %>/comprar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(dados)
+      });
+      
+      const resultado = await response.json();
+      
+      if (response.ok) {
+        mostrarMensagem('Compra realizada com sucesso! Redirecionando...', 'success');
+        setTimeout(() => {
+          window.location.href = '/cliente/ingressos';
+        }, 2000);
+      } else {
+        mostrarMensagem(resultado.error || 'Erro ao processar compra', 'error');
+        btnFinalizar.disabled = false;
+        btnFinalizar.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg><span>Finalizar Compra</span>';
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      mostrarMensagem('Erro de conexão. Tente novamente.', 'error');
+      btnFinalizar.disabled = false;
+      btnFinalizar.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg><span>Finalizar Compra</span>';
+    }
+  });
+  
+  function mostrarMensagem(texto, tipo) {
+    mensagemResultado.textContent = texto;
+    mensagemResultado.className = `mb-6 p-4 rounded-lg ${
+      tipo === 'success' 
+        ? 'bg-green-100 border border-green-400 text-green-700' 
+        : 'bg-red-100 border border-red-400 text-red-700'
+    }`;
+    mensagemResultado.classList.remove('hidden');
+    
+    // Scroll para a mensagem
+    mensagemResultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  // Máscaras para campos
+  document.getElementById('telefone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+    e.target.value = value;
+  });
+  
+  document.getElementById('cpf').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    e.target.value = value;
+  });
+  
+  document.getElementById('numero_cartao').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/(\d{4})(\d)/, '$1 $2');
+    value = value.replace(/(\d{4})(\d)/, '$1 $2');
+    value = value.replace(/(\d{4})(\d)/, '$1 $2');
+    e.target.value = value;
+  });
+  
+  document.getElementById('validade').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/(\d{2})(\d)/, '$1/$2');
+    e.target.value = value;
+  });
+});
+</script>
+

@@ -119,9 +119,15 @@
           localStorage.setItem('token', dados.token);
           localStorage.setItem('usuarioInfo', JSON.stringify(dados.usuario));
           
-          // Redirecionar para a página inicial após 1 segundo
+          // Redirecionamento baseado no tipo de usuário
+          let destino = '/eventos';
+          if (dados.usuario && dados.usuario.tipo_usuario === 'organizador') {
+            destino = '/organizador/dashboard';
+          } else if (dados.usuario && dados.usuario.tipo_usuario === 'cliente') {
+            destino = '/eventos';
+          }
           setTimeout(() => {
-            window.location.href = '/eventos';
+            window.location.href = destino;
           }, 1000);
         } else {
           // Erro no login
