@@ -81,3 +81,5 @@ Filtros e busca
 
 (Detalhe importante para acessar essas views é necessário realizar login como organizador, a medida que há uma verificação usando um token JWT, o qual é salvo nos cookies do site após o login, podendo assim acessar diferentes rotas)
 
+As páginas ainda não estão totalmente interligadas, por isso recomendo que mude de rota na URL
+
