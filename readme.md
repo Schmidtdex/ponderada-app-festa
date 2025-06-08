@@ -31,3 +31,53 @@ Agora utilizando a ferramenta de teste Postman  para enviar requisições aos en
 exemplos de uso: Crie um Evento: Use POST para /api/eventos com os dados do evento
 Liste Eventos: Use GET para /api/eventos para ver o evento criado.
 Compre um Ingresso: Use POST para /api/ingressos/comprar com o tipo_ingresso_id e o usuario_id do cliente.
+
+Páginas Implementadas
+Login e Registro
+
+/registro e /login
+
+Organizador
+
+1.
+Dashboard (/organizador/dashboard)
+
+•
+Estatísticas de eventos e vendas
+
+•
+Gráficos e métricas visuais
+
+•
+Ações rápidas
+
+
+
+2.
+Criar Evento (/organizador/eventos/criar)
+
+•
+Formulário completo de criação
+
+•
+Upload de imagens
+
+•
+Validações em tempo real
+
+
+
+3.
+Gerenciar Eventos (/organizador/eventos)
+
+•
+Lista de todos os eventos
+
+•
+Ações de editar, excluir, visualizar
+
+•
+Filtros e busca
+
+(Detalhe importante para acessar essas views é necessário realizar login como organizador, a medida que há uma verificação usando um token JWT, o qual é salvo nos cookies do site após o login, podendo assim acessar diferentes rotas)
+
