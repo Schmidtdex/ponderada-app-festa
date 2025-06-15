@@ -19,7 +19,6 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static('public'));
 
-app.use('/api', routes);
 app.use('/', routes);
 
 // Inicializa o servidor

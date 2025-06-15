@@ -24,6 +24,8 @@ exports.detalhesEvento = async (req, res) => {
     // Buscar organizador
     const organizador = await Usuario.buscarPorId(evento.organizador_id);
 
+    const eventoPassou = new Date(evento.data_hora_fim || evento.data_hora_inicio) < new Date()
+
     // Buscar atrações (simulação - seria implementado com EventoAtracao)
     const atracoes = [];
 
@@ -34,7 +36,8 @@ exports.detalhesEvento = async (req, res) => {
       evento,
       tiposIngresso,
       organizador,
-      atracoes
+      atracoes,
+      eventoPassou
     });
   } catch (error) {
     console.error('Erro ao buscar detalhes do evento:', error);

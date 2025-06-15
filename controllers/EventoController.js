@@ -46,6 +46,7 @@ exports.criarEvento = async (req, res) => {
 
 // Listar todos os eventos
 exports.listarEventos = async (req, res) => {
+  console.log("Rota /api/eventos chamada")
   try {
     const eventos = await Evento.buscarTodos();
     res.status(200).json(eventos);

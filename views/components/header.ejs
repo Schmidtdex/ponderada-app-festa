@@ -14,8 +14,8 @@
         <a href="/eventos" class="text-primary-100 hover:text-primary-50 font-medium transition-colors duration-200 hover:underline underline-offset-4">
           Eventos
         </a>
-        <a href="/perfil" class="text-primary-100 hover:text-primary-50 font-medium transition-colors duration-200 hover:underline underline-offset-4">
-          Perfil
+        <a id="dashboard-link" href="/organizador/dashboard" style="display:none" class="text-primary-100 hover:text-primary-50 font-medium transition-colors duration-200 hover:underline underline-offset-4">
+          Dashboard
         </a>
         <button onclick="logout()" class="bg-primary-50 text-primary-700 px-4 py-2 rounded-lg font-medium hover:bg-primary-100 transition-all duration-200 shadow-md hover:shadow-lg">
           Sair
@@ -40,4 +40,14 @@
     localStorage.removeItem('usuarioInfo');
     window.location.href = '/login';
   }
+
+  // Exibir botão Dashboard apenas para organizador
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const usuarioInfo = JSON.parse(localStorage.getItem('usuarioInfo'));
+      if (usuarioInfo && usuarioInfo.tipo_usuario === 'organizador') {
+        document.getElementById('dashboard-link').style.display = 'inline-block';
+      }
+    } catch (e) {}
+  });
 </script>
