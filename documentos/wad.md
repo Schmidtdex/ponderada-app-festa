@@ -24,4 +24,9 @@ Os relacionamentos principais incluem:
 ### Modelo Físico desenvolvido:
 É possível encontrar no diretório o file bancoDeDados.sql, o qual contém a modelagem física do banco de dados.
 
+## Considerações finais
+
+Fiquei muito contente com o resultado final do projeto, foi uma longa jornada, cheia de bugs e erros, mas que no final foram superados e com resultado de valer apena. Ademais, acredito que esse site pode ir além de uma ponderada e virar uma aplicação web real, com alguns ajustes para o futuro, como a compra de ingressos, geração de relatórios, cdn para imagens e vídeos, compartilhamento via redes sociais...
+
+
 

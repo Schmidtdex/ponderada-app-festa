@@ -25,7 +25,7 @@ Pronto, seu banco de dados esta configurado!!
 
 Iniciar o Servidor: Execute o seguinte comando na raiz do projeto:
 
-node server.js
+node server.js ou npm run dev
 
 Agora utilizando a ferramenta de teste Postman  para enviar requisições aos endpoints
 exemplos de uso: Crie um Evento: Use POST para /api/eventos com os dados do evento
@@ -82,4 +82,18 @@ Filtros e busca
 (Detalhe importante para acessar essas views é necessário realizar login como organizador, a medida que há uma verificação usando um token JWT, o qual é salvo nos cookies do site após o login, podendo assim acessar diferentes rotas)
 
 As páginas ainda não estão totalmente interligadas, por isso recomendo que mude de rota na URL
+
+## Para executar localmente
+
+clone o projeto na sua máquina e instale as dependências: npm install
+
+## Tecnologias usadas
+node js <br>
+express <br>
+tailwind css <br>
+nodemon <br>
+bcrypt <br>
+cookie-parser
+# Vídeo do site versão final
+https://www.loom.com/share/d62f5ec626d540669b0ba67d97d94535?sid=fcc327c1-f841-4027-94c7-358da932020a
 

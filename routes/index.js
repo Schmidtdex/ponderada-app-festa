@@ -1,12 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Remover rotas de exemplo Tarefas se não forem mais necessárias
-// const TarefaController = require('../controllers/TarefaController');
-// router.post('/tarefas', TarefaController.criarTarefa);
-// router.get('/tarefas', TarefaController.listarTarefas);
-// router.put('/tarefas/:id', TarefaController.editarTarefa);
-// router.delete('/tarefas/:id', TarefaController.excluirTarefa);
 
 // Importar as novas rotas
 const frontRoutes = require("./frontRoutes");
@@ -18,7 +12,7 @@ const ingressoVendidoRoutes = require("./ingressoVendidoRoutes");
 const organizadorRoutes = require("./organizadorRoutes");
 const clienteRoutes = require("./clienteRoutes");
 
-// Rotas para o front-end (se houver)
+
 router.use("/", frontRoutes);
 
 // Rotas da API
@@ -32,7 +26,7 @@ router.use("/api/ingressos", ingressoVendidoRoutes); // Prefixo /api/ingressos
 router.use("/organizador", organizadorRoutes); // Prefixo /organizador
 
 // Rotas do cliente
-router.use("/", clienteRoutes); // Rotas do cliente (sem prefixo para eventos públicos)
+router.use("/", clienteRoutes); 
 
 module.exports = router;
 
